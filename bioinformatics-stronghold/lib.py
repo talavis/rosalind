@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+'''
+Functions used in multiple rosalind problems
+'''
 
 import sys
 
@@ -29,13 +32,13 @@ def test_gen_kmers():
     assert gen_kmers('ACGT', 2) == expected
 
 
-def read_fasta(data):
+def parse_fasta(data):
     '''
-    Read data in the FASTA format
+    Parse data in the FASTA format
     '''
     heads = list()
     seqs = list()
-    
+
     for line in data.split('\n'):
         if len(line.strip()) == 0:
             continue
@@ -45,10 +48,11 @@ def read_fasta(data):
         else:
             seqs[-1] += line.strip()
     return heads, seqs
-    
-def test_read_fasta():
+
+
+def test_parse_fasta():
     '''
-    Test read_fasta()
+    Test parse_fasta()
     '''
     data = '''
 >Rosalind_0209
@@ -58,8 +62,9 @@ AGTACGGGCATCAACCCAGTT
 TTATCTGACAAAGAAAGCCGTCAACGGCTGGATAATTTCGCGATCGTGCTGGTTACTGGC
 GGTACGAGTGTTCCTTTGGGT
 '''
-    expected = (('Rosalind_0209', 'Rosalind_0220'),
-                ('GCAACGCACAACGAAAACCCTTAGGGACTGGATTATTTCGTGATCGTT' +
+    expected = (['Rosalind_0209', 'Rosalind_2200'],
+                ['GCAACGCACAACGAAAACCCTTAGGGACTGGATTATTTCGTGATCGTT' +
                  'GTAGTTATTGGAAGTACGGGCATCAACCCAGTT',
                  'TTATCTGACAAAGAAAGCCGTCAACGGCTGGATAATTTCGCGATCGTG' +
-                 'CTGGTTACTGGCGGTACGAGTGTTCCTTTGGGT'))
+                 'CTGGTTACTGGCGGTACGAGTGTTCCTTTGGGT'])
+    assert parse_fasta(data) == expected
