@@ -40,7 +40,7 @@ def parse_fasta(data):
     seqs = list()
 
     for line in data.split('\n'):
-        if len(line.strip()) == 0:
+        if not line.strip():
             continue
         if line[0] == '>':
             seqs.append('')
@@ -68,3 +68,38 @@ GGTACGAGTGTTCCTTTGGGT
                  'TTATCTGACAAAGAAAGCCGTCAACGGCTGGATAATTTCGCGATCGTG' +
                  'CTGGTTACTGGCGGTACGAGTGTTCCTTTGGGT'])
     assert parse_fasta(data) == expected
+
+
+def read_fasta(filename):
+    '''
+    Read a sequence file in the FASTA format
+    '''
+    with open(filename) as infile:
+        data = infile.read()
+
+    return parse_fasta(data)
+
+
+def test_read_fasta():
+    '''
+    Test read_fasta()
+    '''
+    import tempfile
+    filename = tempfile.mkstemp()[1]
+    data = '''
+>Rosalind_0209
+GCAACGCACAACGAAAACCCTTAGGGACTGGATTATTTCGTGATCGTTGTAGTTATTGGA
+AGTACGGGCATCAACCCAGTT
+>Rosalind_2200
+TTATCTGACAAAGAAAGCCGTCAACGGCTGGATAATTTCGCGATCGTGCTGGTTACTGGC
+GGTACGAGTGTTCCTTTGGGT
+'''
+    with open(filename, 'w') as tmpf:
+        tmpf.write(data)
+
+    expected = (['Rosalind_0209', 'Rosalind_2200'],
+                ['GCAACGCACAACGAAAACCCTTAGGGACTGGATTATTTCGTGATCGTT' +
+                 'GTAGTTATTGGAAGTACGGGCATCAACCCAGTT',
+                 'TTATCTGACAAAGAAAGCCGTCAACGGCTGGATAATTTCGCGATCGTG' +
+                 'CTGGTTACTGGCGGTACGAGTGTTCCTTTGGGT'])
+    assert read_fasta(filename) == expected
