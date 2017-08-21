@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
 '''
-If A and B are sets, then their union A∪B is the set comprising any
-elements in either A or B; their intersection A∩B is the set of
-elements in both A and B; and their set difference A−B is the set of
-elements in A but not in B.
-
-Furthermore, if A is a subset of another set U, then the set
-complement of A with respect to U is defined as the set Ac=U−A.
-
 Given: A positive integer n (n≤20,000) and two subsets A and B of
 {1,2,…,n}.
 

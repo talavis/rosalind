@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
 '''
-For two strings s1 and s2 of equal length, the p-distance between
-them, denoted dp(s1,s2), is the proportion of corresponding symbols
-that differ between s1 and s2.
-
-For a general distance function dd on nn taxa s1,s2,…,sn (taxa are
-often represented by genetic strings), we may encode the distances
-between pairs of taxa via a distance matrix DD in which Di,j=d(si,sj).
-
 Given: A collection of n (n≤10) DNA strings s1,…,sn of equal length
 (at most 1 kbp). Strings are given in FASTA format.
 

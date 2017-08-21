@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 '''
-For a collection of strings, a larger string containing every one of the
-smaller strings as a substring is called a superstring.
-
-By the assumption of parsimony, a shortest possible superstring over a
-collection of reads serves as a candidate chromosome.
-
 Given: At most 50 DNA strings of equal length, not exceeding 1 kbp,
 in FASTA format (which represent reads deriving from the same strand
 of a single linear chromosome).
