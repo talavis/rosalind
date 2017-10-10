@@ -185,7 +185,12 @@ def main(filename):
     '''
     Read input, generate and print trie
     '''
-    
+    with open(filename) as infile:
+        sequences = infile.read().split('\n')
+    tree = Trie()
+    for seq in sequences:
+        tree.addSeq(seq)
+    tree.printTrie()
     
 
 def test_main(capsys):
@@ -195,13 +200,13 @@ def test_main(capsys):
     import tempfile
     data = 'ATAGA\nATC\nGAT'
     filename = tempfile.mkstemp()[1]
-    with open(filename) as tmpfile:
+    with open(filename, 'w') as tmpfile:
         tmpfile.write(data)
     main(filename)
     expected = ('1 2 A\n2 3 T\n3 4 A\n4 5 G\n5 6 A\n'
                 '3 7 C\n1 8 G\n8 9 A\n9 10 T\n')
     out = capsys.readouterr()[0]
-    asset out == expected
+    assert out == expected
 
     
 if __name__ == '__main__':
