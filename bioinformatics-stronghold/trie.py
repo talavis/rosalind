@@ -2,11 +2,13 @@
 '''
 Trie problem at Rosalind
 '''
+import sys
+
 class TrieNode:
     '''
     Representing a node in a trie.
     '''
-    def __init__(self, letter = '', parent = None):
+    def __init__(self, letter='', parent=None):
         '''
         letter: a character to be represented by the node
         parent: the parent of the node
@@ -24,7 +26,7 @@ class TrieNode:
         if isinstance(other, str):
             return self._letter == other
         if isinstance(other, self.__class__):
-            return self._letter == other._letter
+            return self._letter == other.letter
         return False
 
 
@@ -65,7 +67,7 @@ class TrieNode:
         return None
 
 
-    def printNodes(self, num):
+    def print_nodes(self, num):
         '''
         Print a representation of the underlying Nodes
         num: the base number
@@ -75,67 +77,73 @@ class TrieNode:
         for child in self._children:
             num += 1
             print(base, num, child.letter)
-            num = child.printNodes(num)
+            num = child.print_nodes(num)
         return num
 
 
-def test_TrieNode(capsys):
+def test_trienode(capsys):
     '''
     Test TrieNode and its methods
     '''
     # init
-    a = TrieNode('a')
-    assert a == 'a'
-    assert isinstance(a, TrieNode)
+    anode = TrieNode('a')
+    assert anode == 'a'
+    assert isinstance(anode, TrieNode)
+
     # new letter
-    a.letter = 'x'
-    assert a == 'x'
-    assert a.letter == 'x'
-    assert isinstance(a, TrieNode)
+    anode.letter = 'x'
+    assert anode == 'x'
+    assert anode.letter == 'x'
+    assert isinstance(anode, TrieNode)
+
     # add a new child
-    assert isinstance(a.next('b'), TrieNode)
-    assert a.next('b') != a
-    a.next('c')
-    assert a != 1
+    assert isinstance(anode.next('b'), TrieNode)
+    assert anode.next('b') != anode
+    anode.next('c')
+    assert anode != 1
+
     # correct/incorrect match
-    assert a.match('b')
-    assert not a.match('x')
-    assert a.match('c')
+    assert anode.match('b')
+    assert not anode.match('x')
+
     # add children to child
-    b = a.next('d')
-    b.next('e')
-    b.next('f')
+    bnode = anode.next('d')
+    bnode.next('e')
+    bnode.next('f')
+
     # add another child to same child
-    c = a.next('d')
-    c.next('g')
-    assert b is c
-    assert a is not b
-    # test printNodes
-    a.printNodes(1)
+    cnode = anode.next('d')
+    cnode.next('g')
+    assert bnode is cnode
+    assert anode is not bnode
+
+    # test print_nodes
+    anode.print_nodes(1)
     out = capsys.readouterr()[0]
     expected = '1 2 b\n1 3 c\n1 4 d\n4 5 e\n4 6 f\n4 7 g\n'
     assert out == expected
+
     # add to children to another child
-    c = a.next('c')
-    c.next('h')    
-    a.printNodes(1)
+    cnode = anode.next('c')
+    cnode.next('h')
+    anode.print_nodes(1)
     out = capsys.readouterr()[0]
-    expected = '1 2 b\n1 3 c\n3 4 h\n1 5 d\n5 6 e\n5 7 f\n5 8 g\n'    
+    expected = '1 2 b\n1 3 c\n3 4 h\n1 5 d\n5 6 e\n5 7 f\n5 8 g\n'
 
 
 class Trie:
     '''
     Contains a Trie representing sequences
     '''
-    def __init__(self, sequence = ''):
+    def __init__(self, sequence=''):
         '''
         sequence: initial sequence to add
         '''
         self._root = TrieNode()
-        self.addSeq(sequence)
+        self.add_seq(sequence)
 
 
-    def addSeq(self, sequence):
+    def add_seq(self, sequence):
         '''
         Add nodes corresponding to the given sequence
         sequence: the sequence to be added
@@ -158,25 +166,24 @@ class Trie:
         return True
 
 
-    def printTrie(self):
+    def print_trie(self):
         '''
         Print a representation of the tree
         Format: node1 node2 letter
         '''
-        num = 1
-        self._root.printNodes(1)
+        self._root.print_nodes(1)
 
 
-def test_Trie(capsys):
+def test_trie(capsys):
     '''
     Test Trie and its methods
     '''
-    a = Trie()
-    a.addSeq('abcdef')
-    assert a.matches('abcdef')
-    assert not a.matches('fedcba')
-    a.addSeq('abcabc')
-    a.printTrie()
+    trie = Trie()
+    trie.add_seq('abcdef')
+    assert trie.matches('abcdef')
+    assert not trie.matches('fedcba')
+    trie.add_seq('abcabc')
+    trie.print_trie()
     out = capsys.readouterr()[0]
     expected = ('1 2 a\n2 3 b\n3 4 c\n4 5 d\n5 6 e\n' +
                 '6 7 f\n4 8 a\n8 9 b\n9 10 c\n')
@@ -191,9 +198,9 @@ def main(filename):
         sequences = infile.read().split('\n')
     tree = Trie()
     for seq in sequences:
-        tree.addSeq(seq)
-    tree.printTrie()
-    
+        tree.add_seq(seq)
+    tree.print_trie()
+
 
 def test_main(capsys):
     '''
@@ -210,7 +217,7 @@ def test_main(capsys):
     out = capsys.readouterr()[0]
     assert out == expected
 
-    
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.stderr.write('Usage: {} <sequence file>\n'.format(sys.argv[0]))
