@@ -79,6 +79,48 @@ class TrieNode:
         return num
 
 
+def test_TrieNode(capsys):
+    '''
+    Test TrieNode and its methods
+    '''
+    # init
+    a = TrieNode('a')
+    assert a == 'a'
+    assert isinstance(a, TrieNode)
+    # new letter
+    a.letter = 'x'
+    assert a == 'x'
+    assert a.letter == 'x'
+    assert isinstance(a, TrieNode)
+    # add a new child
+    assert isinstance(a.next('b'), TrieNode)
+    a.next('c')
+    # correct/incorrect match
+    assert a.match('b')
+    assert not a.match('x')
+    assert a.match('c')
+    # add children to child
+    b = a.next('d')
+    b.next('e')
+    b.next('f')
+    # add another child to same child
+    c = a.next('d')
+    c.next('g')
+    assert b is c
+    assert a is not b
+    # test printNodes
+    a.printNodes(1)
+    out = capsys.readouterr()[0]
+    expected = '1 2 b\n1 3 c\n1 4 d\n4 5 e\n4 6 f\n4 7 g\n'
+    assert out == expected
+    # add to children to another child
+    c = a.next('c')
+    c.next('h')    
+    a.printNodes(1)
+    out = capsys.readouterr()[0]
+    expected = '1 2 b\n1 3 c\n3 4 h\n1 5 d\n5 6 e\n5 7 f\n5 8 g\n'    
+
+
 class Trie:
     '''
     Contains a Trie representing sequences
@@ -101,10 +143,69 @@ class Trie:
             current = current.next(letter)
 
 
-    def printTrie():
+    def matches(self, sequence):
+        '''
+        Tests whether a sequence matches any of the current ones
+        '''
+        current = self._root
+        for letter in sequence:
+            tmp = current.match(letter)
+            if not tmp:
+                return False
+            current = tmp
+        return True
+
+
+    def printTrie(self):
         '''
         Print a representation of the tree
         Format: node1 node2 letter
         '''
         num = 1
-        
+        self._root.printNodes(1)
+
+
+def test_Trie(capsys):
+    '''
+    Test Trie and its methods
+    '''
+    a = Trie()
+    a.addSeq('abcdef')
+    assert a.matches('abcdef')
+    assert not a.matches('fedcba')
+    a.addSeq('abcabc')
+    a.printTrie()
+    out = capsys.readouterr()[0]
+    expected = ('1 2 a\n2 3 b\n3 4 c\n4 5 d\n5 6 e\n' +
+                '6 7 f\n4 8 a\n8 9 b\n9 10 c\n')
+    assert out == expected
+
+
+def main(filename):
+    '''
+    Read input, generate and print trie
+    '''
+    
+    
+
+def test_main(capsys):
+    '''
+    Test main()
+    '''
+    import tempfile
+    data = 'ATAGA\nATC\nGAT'
+    filename = tempfile.mkstemp()[1]
+    with open(filename) as tmpfile:
+        tmpfile.write(data)
+    main(filename)
+    expected = ('1 2 A\n2 3 T\n3 4 A\n4 5 G\n5 6 A\n'
+                '3 7 C\n1 8 G\n8 9 A\n9 10 T\n')
+    out = capsys.readouterr()[0]
+    asset out == expected
+
+    
+if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        sys.stderr.write('Usage: {} <sequence file>\n'.format(sys.argv[0]))
+        sys.exit(1)
+    main(sys.argv[1])
