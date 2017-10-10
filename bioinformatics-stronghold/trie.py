@@ -94,7 +94,9 @@ def test_TrieNode(capsys):
     assert isinstance(a, TrieNode)
     # add a new child
     assert isinstance(a.next('b'), TrieNode)
+    assert a.next('b') != a
     a.next('c')
+    assert a != 1
     # correct/incorrect match
     assert a.match('b')
     assert not a.match('x')
